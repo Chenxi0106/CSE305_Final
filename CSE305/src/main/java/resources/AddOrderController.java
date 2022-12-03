@@ -42,18 +42,18 @@ public class AddOrderController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-        String employeeId;
+        String employeeId = null;
         Employee employee = null;
         String customerId = request.getParameter("customerId");
 
         // submitted by customer
         if (customerId == null) {
-            customerId = (String) request.getSession(false).getAttribute("customerID");
+            customerId = (String) request.getSession(false).getAttribute("customerId");
         }
         else
         {
             EmployeeDao employeeDao = new EmployeeDao();
-            employeeId = (String) request.getSession(false).getAttribute("employeeID");
+            employeeId = (String) request.getSession(false).getAttribute("employeeId");
             employee = employeeDao.getEmployee(employeeId);
         }
         String numShares = request.getParameter("orderNumShares");
@@ -75,7 +75,10 @@ public class AddOrderController extends HttpServlet {
         {
             MarketOrder order = new MarketOrder();
             order.setDatetime(new Date());
+            order.setPrice_type("Market");
             order.setBuySellType(buySellType);
+            order.setCus_Acc_Num(Integer.parseInt(customerId));
+            order.setEmployee_Id(employee.getEmployeeID());
             order.setNumShares(Integer.parseInt(numShares));
             result = orderDao.submitOrder(order, customer, employee, stock);
         }
@@ -83,16 +86,22 @@ public class AddOrderController extends HttpServlet {
 		{
             MarketOnCloseOrder order = new MarketOnCloseOrder();
             order.setDatetime(new Date());
+            order.setPrice_type("MarketOnClose");
             order.setBuySellType(buySellType);
+            order.setEmployee_Id(employee.getEmployeeID());
             order.setNumShares(Integer.parseInt(numShares));
+            order.setCus_Acc_Num(Integer.parseInt(customerId));
             result = orderDao.submitOrder(order, customer, employee, stock);
         }
 		else if(type.equals("TrailingStop"))
 		{
             TrailingStopOrder order = new TrailingStopOrder();
             order.setDatetime(new Date());
+            order.setPrice_type("TrailingStop");
             order.setPercentage(Double.parseDouble(orderStockPercentage));
+            order.setEmployee_Id(employee.getEmployeeID());
             order.setNumShares(Integer.parseInt(numShares));
+            order.setCus_Acc_Num(Integer.parseInt(customerId));
             result = orderDao.submitOrder(order, customer, employee, stock);
 
         }
@@ -102,6 +111,8 @@ public class AddOrderController extends HttpServlet {
             order.setDatetime(new Date());
             order.setPricePerShare(Double.parseDouble(pricePerShare));
             order.setNumShares(Integer.parseInt(numShares));
+            order.setCus_Acc_Num(Integer.parseInt(customerId));
+            order.setEmployee_Id(employee.getEmployeeID());
             result = orderDao.submitOrder(order, customer, employee, stock);
         }
         RequestDispatcher rd;

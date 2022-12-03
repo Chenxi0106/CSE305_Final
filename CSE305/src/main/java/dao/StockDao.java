@@ -1,9 +1,15 @@
 package dao;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import model.Customer;
+import model.Location;
 import model.Stock;
 
 public class StockDao {
@@ -120,8 +126,36 @@ public class StockDao {
 		 * The students code to fetch data from the database will be written here
 		 * Return stock suggestions for given "customerId"
 		 */
-
-        return getDummyStocks();
+    	List<Stock> res=new ArrayList<Stock>();
+        System.out.println("Start getStockSuggestions Function");
+		final String DB_URL = "jdbc:mysql://localhost:3306/CSE305";
+		final String USER = "root";
+		final String PASS = "2002318";
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+	        Statement stmt = conn.createStatement();
+	        System.out.println("successfully connect to database");
+	        String query="select * from Stock S, Orders O where O.Cus_Acc_Num="+customerID+" and O.StockSymbol=S.StockSymbol";
+;		    System.out.println(query);
+	        ResultSet result=stmt.executeQuery(query);
+			while (result.next()) {
+				Stock stock = new Stock();
+		        stock.setName(result.getString("StockName"));
+		        stock.setSymbol(result.getString("StockSymbol"));
+		        stock.setPrice(result.getInt("SharePrice"));
+		        stock.setNumShares(result.getInt("NumberofShares"));
+		        stock.setType(result.getString("StockType"));
+		        res.add(stock);
+				
+			}
+			return res;
+			
+	         
+	      } catch (Exception e) {
+	         e.printStackTrace();
+	      }
+		return null;
 
     }
 

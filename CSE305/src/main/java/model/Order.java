@@ -12,6 +12,41 @@ public class Order {
 	private int id;
     private Date datetime;
     private int numShares;
+    private int Cus_Acc_Num;
+    private String Price_type;
+    private String Employee_Id;
+    private String buySellType;
+
+    public String getBuySellType() {
+        return buySellType;
+    }
+
+    public void setBuySellType(String buySellType) {
+        this.buySellType = buySellType;
+    }
+    
+    public String getEmployee_Id() {
+    	return Employee_Id;
+    }
+    public void setEmployee_Id(String val) {
+    	Employee_Id=val;
+    }
+
+    
+    
+    public String getPrice_type() {
+    	return Price_type;
+    }
+    public void setPrice_type(String val) {
+    	Price_type=val;
+    }
+    
+    public int getCus_Acc_Num() {
+    	return Cus_Acc_Num;
+    }
+    public void setCus_Acc_Num(int value) {
+    	Cus_Acc_Num=value;
+    }
 
     public int getId() {
         return id;

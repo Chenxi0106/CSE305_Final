@@ -2,6 +2,9 @@ package dao;
 
 import model.*;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -78,7 +81,25 @@ public class OrderDao {
          * */
 
 		/*Sample data begins*/
-        return "success";
+    	System.out.println("Start submitOrder Function");
+		final String DB_URL = "jdbc:mysql://localhost:3306/CSE305";
+		final String USER = "root";
+		final String PASS = "2002318";
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+	        Statement stmt = conn.createStatement();
+	        System.out.println("successfully connect to database");
+	        String query="insert into Orders values("+order.getId()+","+'\''+stock.getSymbol()+'\''+","+'\''+order.getBuySellType()+'\''+","+ order.getNumShares()+","+order.getCus_Acc_Num()+","+
+	        "NULL"+",NULL"+","+'\''+order.getPrice_type()+'\''+","+'\''+employee.getEmployeeID()+'\''+")";
+	        System.out.println(query);
+	        int result=stmt.executeUpdate(query);
+	        return "success";
+
+	      } catch (Exception e) {
+	         e.printStackTrace();
+	      }
+		return "failure";
 		/*Sample data ends*/
 
     }
