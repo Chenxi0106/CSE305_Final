@@ -91,7 +91,9 @@ public class OrderDao {
 	        Statement stmt = conn.createStatement();
 	        System.out.println("successfully connect to database");
 	        String query="insert into Orders values("+order.getId()+","+'\''+stock.getSymbol()+'\''+","+'\''+order.getBuySellType()+'\''+","+ order.getNumShares()+","+order.getCus_Acc_Num()+","+
-	        "NULL"+",NULL"+","+'\''+order.getPrice_type()+'\''+","+'\''+employee.getEmployeeID()+'\''+")";
+	        			'\''+new java.sql.Date(order.getDatetime().getTime())+'\''+",NULL"+","+'\''+order.getPrice_type()+'\''+","+'\''+employee.getEmployeeID()+'\''+","+order.getPricePerShare()+","+order.getPercentage()+")";
+	        
+
 	        System.out.println(query);
 	        int result=stmt.executeUpdate(query);
 	        return "success";

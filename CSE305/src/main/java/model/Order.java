@@ -16,6 +16,25 @@ public class Order {
     private String Price_type;
     private String Employee_Id;
     private String buySellType;
+    private double percentage;
+    private double pricePerShare;
+
+    public double getPricePerShare() {
+        return pricePerShare;
+    }
+
+    public void setPricePerShare(double pricePerShare) {
+        this.pricePerShare = pricePerShare;
+    }
+
+    public double getPercentage() {
+        return percentage;
+    }
+
+    public void setPercentage(double percentage) {
+        this.percentage = percentage;
+    }
+    
 
     public String getBuySellType() {
         return buySellType;

@@ -110,6 +110,7 @@ public class AddOrderController extends HttpServlet {
             HiddenStopOrder order = new HiddenStopOrder();
             order.setDatetime(new Date());
             order.setPricePerShare(Double.parseDouble(pricePerShare));
+            order.setPercentage(Double.parseDouble(orderStockPercentage));
             order.setNumShares(Integer.parseInt(numShares));
             order.setCus_Acc_Num(Integer.parseInt(customerId));
             order.setEmployee_Id(employee.getEmployeeID());
