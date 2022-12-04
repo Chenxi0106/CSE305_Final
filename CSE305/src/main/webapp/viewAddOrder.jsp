@@ -3,7 +3,6 @@
 <%@ include file="header.jsp" %>
 <div class="container">
     <h2>Add order</h2>
-
 	<form action="addOrder" method="POST">
 	  <div class="form-group">
 	    <label for="orderType">Order Type</label>
