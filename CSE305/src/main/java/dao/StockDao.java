@@ -89,15 +89,43 @@ public class StockDao {
 
 	}
 
-    public List<Stock> getCustomerBestsellers(String customerID) {
+ public List<Stock> getCustomerBestsellers(String customerID) {
 
 		/*
 		 * The students code to fetch data from the database will be written here.
 		 * Get list of customer bestseller stocks
 		 */
+ 		final String DB_URL = "jdbc:mysql://localhost:3306/CSE305";
+		final String USER = "root";
+		final String PASS = "2002318";   
+		
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+       			Statement stmt = conn.createStatement();		
+			System.out.println("successfully connect to database");	
+			String query="select distinct * from Stock where StockSymbol in (select StockSymbol from Orders where Cus_Acc_Num="+customerID+") order by SharePrice desc;";
+	       		ResultSet result=stmt.executeQuery(query);
+			List<Stock> res=new ArrayList<Stock>();
+			while (result.next()){
+				Stock stock = new Stock();
+		        	stock.setName(result.getString("StockName"));
+		        	stock.setSymbol(result.getString("StockSymbol"));
+		        	stock.setPrice(result.getInt("SharePrice"));
+		        	stock.setNumShares(result.getInt("NumberofShares"));
+		        	stock.setType(result.getString("StockType"));
+		        	res.add(stock);	
 
-        return getDummyStocks();
+			}
+			return res;
+		
+		}catch(Exception e){
+			e.printStackTrace();	
+		}
+		
 
+		return null;
+	    
     }
 
 	public List getStocksByCustomer(String customerId) {
@@ -106,8 +134,37 @@ public class StockDao {
 		 * The students code to fetch data from the database will be written here
 		 * Get stockHoldings of customer with customerId
 		 */
+		
+ 		final String DB_URL = "jdbc:mysql://localhost:3306/CSE305";
+		final String USER = "root";
+		final String PASS = "2002318";   
+		
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+       			Statement stmt = conn.createStatement();		
+			System.out.println("successfully connect to database");	
+			String query="select distinct * from Stock where StockSymbol in (select StockSymbol from Orders where Cus_Acc_Num="+customerId+");";
+	       		ResultSet result=stmt.executeQuery(query);
+			List<Stock> res=new ArrayList<Stock>();
+			while (result.next()){
+				Stock stock = new Stock();
+		        	stock.setName(result.getString("StockName"));
+		        	stock.setSymbol(result.getString("StockSymbol"));
+		        	stock.setPrice(result.getInt("SharePrice"));
+		        	stock.setNumShares(result.getInt("NumberofShares"));
+		        	stock.setType(result.getString("StockType"));
+		        	res.add(stock);	
 
-		return getDummyStocks();
+			}
+			return res;
+		
+		}catch(Exception e){
+			e.printStackTrace();	
+		}
+		
+
+		return null;
 	}
 
     public List<Stock> getStocksByName(String name) {
@@ -116,8 +173,37 @@ public class StockDao {
 		 * The students code to fetch data from the database will be written here
 		 * Return list of stocks matching "name"
 		 */
+	    
+		final String DB_URL = "jdbc:mysql://localhost:3306/CSE305";
+		final String USER = "root";
+		final String PASS = "2002318";   
+		
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+       			Statement stmt = conn.createStatement();		
+			System.out.println("successfully connect to database");	
+			String query="select * from Stock where stockName="+name;
+	       		ResultSet result=stmt.executeQuery(query);
+			List<Stock> res=new ArrayList<Stock>();
+			while (result.next()){
+				Stock stock = new Stock();
+		        	stock.setName(result.getString("StockName"));
+		        	stock.setSymbol(result.getString("StockSymbol"));
+		        	stock.setPrice(result.getInt("SharePrice"));
+		        	stock.setNumShares(result.getInt("NumberofShares"));
+		        	stock.setType(result.getString("StockType"));
+		        	res.add(stock);	
 
-        return getDummyStocks();
+			}
+			return res;
+		
+		}catch(Exception e){
+			e.printStackTrace();	
+		}
+		
+
+		return null;
     }
 
     public List<Stock> getStockSuggestions(String customerID) {
@@ -166,8 +252,37 @@ public class StockDao {
 		 * Return list of stock objects, showing price history
 		 */
 
-        return getDummyStocks();
-    }
+    	final String DB_URL = "jdbc:mysql://localhost:3306/CSE305";
+		final String USER = "root";
+		final String PASS = "2002318";   
+		
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+       		Statement stmt = conn.createStatement();		
+			System.out.println("successfully connect to database");	
+			String query="select * from Stock where stockSymbol="+stockSymbol;
+	       	ResultSet result=stmt.executeQuery(query);
+			List<Stock> res=new ArrayList<Stock>();
+			while (result.next()){
+				Stock stock = new Stock();
+		        	stock.setName(result.getString("StockName"));
+		        	stock.setSymbol(result.getString("StockSymbol"));
+		        	stock.setPrice(result.getInt("SharePrice"));
+		        	stock.setNumShares(result.getInt("NumberofShares"));
+		        	stock.setType(result.getString("StockType"));
+		        	res.add(stock);	
+
+			}
+			return res;
+		
+		}catch(Exception e){
+			e.printStackTrace();	
+		}
+		
+
+		return null;     
+	}
 
     public List<String> getStockTypes() {
 
@@ -190,6 +305,35 @@ public class StockDao {
 		 * Return list of stocks of type "stockType"
 		 */
 
-        return getDummyStocks();
+		final String DB_URL = "jdbc:mysql://localhost:3306/CSE305";
+		final String USER = "root";
+		final String PASS = "2002318";   
+		
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+       		Statement stmt = conn.createStatement();		
+			System.out.println("successfully connect to database");	
+			String query="select * from Stock where StockType="+stockType;
+	       	ResultSet result=stmt.executeQuery(query);
+			List<Stock> res=new ArrayList<Stock>();
+			while (result.next()){
+				Stock stock = new Stock();
+		        	stock.setName(result.getString("StockName"));
+		        	stock.setSymbol(result.getString("StockSymbol"));
+		        	stock.setPrice(result.getInt("SharePrice"));
+		        	stock.setNumShares(result.getInt("NumberofShares"));
+		        	stock.setType(result.getString("StockType"));
+		        	res.add(stock);	
+
+			}
+			return res;
+		
+		}catch(Exception e){
+			e.printStackTrace();	
+		}
+		
+
+		return null;    
     }
 }
