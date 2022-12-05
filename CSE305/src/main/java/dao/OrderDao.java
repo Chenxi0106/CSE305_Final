@@ -123,7 +123,7 @@ public class OrderDao {
 			Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			Statement stmt = conn.createStatement();
 			System.out.println("successfully connect to database");
-			String query = "select * from Orders where StockSymbol=" + stockSymbol;
+			String query = "select * from Orders where StockSymbol=" +'\''+stockSymbol+'\'';
 			;
 			System.out.println(query);
 			ResultSet result = stmt.executeQuery(query);
@@ -167,7 +167,7 @@ public class OrderDao {
 			Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			Statement stmt = conn.createStatement();
 			System.out.println("successfully connect to database");
-			String query = "select * from Orders where Customer_name=" + customerName;
+			String query = "select * from Orders where Customer_name=" +'\''+customerName+'\'';
 			;
 			System.out.println(query);
 			ResultSet result = stmt.executeQuery(query);

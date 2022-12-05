@@ -238,11 +238,7 @@ public class StockDao {
 
 	}
 
-<<<<<<< HEAD
 	public List<Stock> getCustomerBestsellers(String customerID) {
-=======
- public List<Stock> getCustomerBestsellers(String customerID) {
->>>>>>> c2837a19fe010bd9323d039cd8ed8c7ae9311e53
 
 		/*
 		 * The students code to fetch data from the database will be written here.
@@ -287,7 +283,7 @@ public class StockDao {
 		 * The students code to fetch data from the database will be written here
 		 * Get stockHoldings of customer with customerId
 		 */
-		
+		System.out.println("START FUNCTION getStocksByCustomer");
  		final String DB_URL = "jdbc:mysql://localhost:3306/CSE305";
 		final String USER = "root";
 		final String PASS = "2002318";   
@@ -336,7 +332,7 @@ public class StockDao {
 			Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
        			Statement stmt = conn.createStatement();		
 			System.out.println("successfully connect to database");	
-			String query="select * from Stock where stockName="+name;
+			String query="select * from Stock where stockName="+'\''+name+'\'';
 	       		ResultSet result=stmt.executeQuery(query);
 			List<Stock> res=new ArrayList<Stock>();
 			while (result.next()){
@@ -375,7 +371,7 @@ public class StockDao {
 			Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 	        Statement stmt = conn.createStatement();
 	        System.out.println("successfully connect to database");
-	        String query="select * from Stock S, Orders O where O.Cus_Acc_Num="+customerID+" and O.StockSymbol=S.StockSymbol";
+	        String query="select * from Stock S, Orders O where O.Cus_Acc_Num="+'\''+customerID+'\''+" and O.StockSymbol=S.StockSymbol";
 ;		    System.out.println(query);
 	        ResultSet result=stmt.executeQuery(query);
 			while (result.next()) {
@@ -414,7 +410,7 @@ public class StockDao {
 			Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
        		Statement stmt = conn.createStatement();		
 			System.out.println("successfully connect to database");	
-			String query="select * from Stock where stockSymbol="+stockSymbol;
+			String query="select * from Stock where stockSymbol="+'\''+stockSymbol+'\'';
 	       	ResultSet result=stmt.executeQuery(query);
 			List<Stock> res=new ArrayList<Stock>();
 			while (result.next()){
@@ -444,11 +440,30 @@ public class StockDao {
 		 * Populate types with stock types
 		 */
 
-        List<String> types = new ArrayList<String>();
-        types.add("technology");
-        types.add("finance");
-        return types;
-
+        
+        final String DB_URL = "jdbc:mysql://localhost:3306/CSE305";
+		final String USER = "root";
+		final String PASS = "2002318";   
+		
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+       		Statement stmt = conn.createStatement();		
+			System.out.println("successfully connect to database");	
+			String query="select DISTINCT StockType from Stock";
+	       	ResultSet result=stmt.executeQuery(query);
+	       	List<String> types = new ArrayList<String>();
+			while (result.next()){
+				if(types.indexOf(result.getString("StockType"))<0);
+		        	types.add(result.getString("StockType"));
+			}
+			return types;
+		
+		}catch(Exception e){
+			e.printStackTrace();	
+		}
+		return null;
+        
     }
 
     public List<Stock> getStockByType(String stockType) {
@@ -467,7 +482,7 @@ public class StockDao {
 			Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
        		Statement stmt = conn.createStatement();		
 			System.out.println("successfully connect to database");	
-			String query="select * from Stock where StockType="+stockType;
+			String query="select * from Stock where StockType="+'\''+stockType+'\'';
 	       	ResultSet result=stmt.executeQuery(query);
 			List<Stock> res=new ArrayList<Stock>();
 			while (result.next()){
