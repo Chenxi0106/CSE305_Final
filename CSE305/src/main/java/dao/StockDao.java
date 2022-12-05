@@ -238,7 +238,11 @@ public class StockDao {
 
 	}
 
+<<<<<<< HEAD
 	public List<Stock> getCustomerBestsellers(String customerID) {
+=======
+ public List<Stock> getCustomerBestsellers(String customerID) {
+>>>>>>> c2837a19fe010bd9323d039cd8ed8c7ae9311e53
 
 		/*
 		 * The students code to fetch data from the database will be written here.

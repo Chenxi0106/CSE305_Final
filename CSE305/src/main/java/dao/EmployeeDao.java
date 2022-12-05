@@ -180,7 +180,7 @@ try {
        Statement stmt = conn.createStatement();
        System.out.println("successfully connect to database");
        String query="select * from Employee";
-;    System.out.println(query);
+       System.out.println(query);
        ResultSet result=stmt.executeQuery(query);
        List<Employee> employees = new ArrayList<Employee>();
 while (result.next()) {
