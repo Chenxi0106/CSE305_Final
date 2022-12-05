@@ -8,6 +8,6 @@ Yanguang Gong,
 Wangzile Zhang.
 
 Email：
-Yanguang Gong: yanguang.gong@stonybrook.edu
 Chenxi Lin: chenxi.lin@stonybrook.edu
+Yanguang Gong: yanguang.gong@stonybrook.edu
 Wangzile Zhang:wangzile.zhang@stonybrook.edu
