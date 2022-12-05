@@ -7,7 +7,7 @@ public class RevenueItem {
     private double pricePerShare;
     private Date date;
     private String stockSymbol;
-    private String accountId;
+    private long accountId;
     private double amount;
 
     public int getNumShares() {
@@ -42,11 +42,11 @@ public class RevenueItem {
         this.stockSymbol = stockSymbol;
     }
 
-    public String getAccountId() {
+    public long getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(String accountId) {
+    public void setAccountId(long accountId) {
         this.accountId = accountId;
     }
 
@@ -57,4 +57,10 @@ public class RevenueItem {
     public void setAmount(double amount) {
         this.amount = amount;
     }
+
+	public void setAccountId(int accountId2) {
+		// TODO Auto-generated method stub
+		this.accountId = accountId2;
+		
+	}
 }

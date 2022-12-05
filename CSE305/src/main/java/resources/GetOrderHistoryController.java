@@ -39,7 +39,8 @@ public class GetOrderHistoryController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String customerID = request.getParameter("customerID");
+		String customerID = request.getParameter("customerId");
+		System.out.println("customer:"+customerID);
 		
 		OrderDao orderDao = new OrderDao();
 		List<Order> orders = orderDao.getOrderHistory(customerID);

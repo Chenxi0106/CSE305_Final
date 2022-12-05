@@ -48,12 +48,12 @@ public class AddOrderController extends HttpServlet {
 
         // submitted by customer
         if (customerId == null) {
-            customerId = (String) request.getSession(false).getAttribute("customerId");
+            customerId = (String) request.getSession(false).getAttribute("customerID");
         }
         else
         {
             EmployeeDao employeeDao = new EmployeeDao();
-            employeeId = (String) request.getSession(false).getAttribute("employeeId");
+            employeeId = (String) request.getSession(false).getAttribute("employeeID");
             employee = employeeDao.getEmployee(employeeId);
         }
         String numShares = request.getParameter("orderNumShares");
@@ -67,19 +67,20 @@ public class AddOrderController extends HttpServlet {
         CustomerDao customerDao = new CustomerDao();
         StockDao stockDao = new StockDao();
         
-//        System.out.println("customer id="+customerId+"and Employee id="+employeeId);
+        System.out.println("customer id="+customerId+" and Employee id="+employeeId);
         Customer customer = customerDao.getCustomer(customerId);
         Stock stock = stockDao.getStockBySymbol(stockSymbol);
         String result = "success";
-
         if (type.equals("Market"))
         {
             MarketOrder order = new MarketOrder();
             order.setDatetime(new Date());
             order.setPrice_type("Market");
-            order.setCustomerName(customer.getLastName()+customer.getFirstName());
+            if(customer!=null)
+            	order.setCustomerName(customer.getLastName()+customer.getFirstName());
             order.setBuySellType(buySellType);
-            order.setCustomerID(Long.parseLong(customerId));
+            if(customerId!=null)
+            	order.setCustomerID(Long.parseLong(customerId));
             if(employee!=null&&employee.getEmployeeID()!=null)
             	order.setEmployee_Id(employee.getEmployeeID());
             order.setNumShares(Integer.parseInt(numShares));
@@ -89,24 +90,30 @@ public class AddOrderController extends HttpServlet {
 		{
             MarketOnCloseOrder order = new MarketOnCloseOrder();
             order.setDatetime(new Date());
+            if(customer!=null)
+            	order.setCustomerName(customer.getLastName()+customer.getFirstName());
             order.setPrice_type("MarketOnClose");
             order.setBuySellType(buySellType);
             if(employee!=null&&employee.getEmployeeID()!=null)
             	order.setEmployee_Id(employee.getEmployeeID());
             order.setNumShares(Integer.parseInt(numShares));
-            order.setCustomerID(Integer.parseInt(customerId));
+            if(customerId!=null)
+            	order.setCustomerID(Integer.parseInt(customerId));
             result = orderDao.submitOrder(order, customer, employee, stock);
         }
 		else if(type.equals("TrailingStop"))
 		{
             TrailingStopOrder order = new TrailingStopOrder();
+            if(customer!=null)
+            	order.setCustomerName(customer.getLastName()+customer.getFirstName());
             order.setDatetime(new Date());
             order.setPrice_type("TrailingStop");
             order.setPercentage(Double.parseDouble(orderStockPercentage));
             if(employee!=null&&employee.getEmployeeID()!=null)
             	order.setEmployee_Id(employee.getEmployeeID());
             order.setNumShares(Integer.parseInt(numShares));
-            order.setCustomerID(Long.parseLong(customerId));
+            if(customerId!=null)
+            	order.setCustomerID(Long.parseLong(customerId));
             result = orderDao.submitOrder(order, customer, employee, stock);
 
         }
@@ -114,10 +121,13 @@ public class AddOrderController extends HttpServlet {
 		{
             HiddenStopOrder order = new HiddenStopOrder();
             order.setDatetime(new Date());
+            if(customer!=null)
+            	order.setCustomerName(customer.getLastName()+customer.getFirstName());
             order.setPricePerShare(Double.parseDouble(pricePerShare));
             order.setPercentage(Double.parseDouble(orderStockPercentage));
             order.setNumShares(Integer.parseInt(numShares));
-            order.setCustomerID(Long.parseLong(customerId));
+            if(customer!=null)
+            	order.setCustomerID(Long.parseLong(customerId));
             if(employee.getEmployeeID()!=null)
             	order.setEmployee_Id(employee.getEmployeeID());
             result = orderDao.submitOrder(order, customer, employee, stock);

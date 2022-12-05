@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import model.Customer;
-import model.Location;
+import model.RevenueItem;
 import model.Stock;
 
 public class StockDao {
@@ -45,18 +44,84 @@ public class StockDao {
 		 * Return list of actively traded stocks
 		 */
 
-        return getDummyStocks();
+    	System.out.println("Start getActivelyTradedStocks Function");
+        final String DB_URL = "jdbc:mysql://localhost:3306/CSE305";
+        final String USER = "root";
+        final String PASS = "2002318";
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement stmt = conn.createStatement();
+            System.out.println("successfully connect to database");
+            
+            String query = "select  * from\n" + 
+            		"Stock S, orders O\n" + 
+            		"where S.StockSymbol = O.StockSymbol and O.OrderType = " + '\'' + "sell" + '\'';
+            
+            System.out.println(query);
+            ResultSet result=stmt.executeQuery(query);
+            List<Stock> stocks = new ArrayList<Stock>();
+            while (result.next()) {
+            	Stock stock = new Stock();
+                stock.setName(result.getString("StockName"));
+                stock.setSymbol(result.getString("StockSymbol"));
+                stock.setPrice(result.getDouble("SharePrice"));
+                stock.setNumShares(result.getInt("NumberofShares"));
+                stock.setType(result.getString("StockType"));
+                stocks.add(stock);
+            }
+            return stocks;
+
+
+         } catch (Exception e) {
+            e.printStackTrace();
+         }
+
+        return null;
 
     }
 
 	public List<Stock> getAllStocks() {
+	
 		
 		/*
 		 * The students code to fetch data from the database will be written here
 		 * Return list of stocks
 		 */
 		
-		return getDummyStocks();
+		System.out.println("Start getAllStocks Function");
+        final String DB_URL = "jdbc:mysql://localhost:3306/CSE305";
+        final String USER = "root";
+        final String PASS = "2002318";
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement stmt = conn.createStatement();
+            System.out.println("successfully connect to database");
+            
+            String query = "select * from Stock";
+            
+            System.out.println(query);
+            ResultSet result=stmt.executeQuery(query);
+            List<Stock> stocks = new ArrayList<Stock>();
+            while (result.next()) {
+            	Stock stock = new Stock();
+                stock.setName(result.getString("StockName"));
+                stock.setSymbol(result.getString("StockSymbol"));
+                stock.setPrice(result.getDouble("SharePrice"));
+                stock.setNumShares(result.getInt("NumberofShares"));
+                stock.setType(result.getString("StockType"));
+                stocks.add(stock);
+            }            
+            
+            return stocks;
+
+
+         } catch (Exception e) {
+            e.printStackTrace();
+         }
+
+        return null;
 
 	}
 
@@ -66,7 +131,36 @@ public class StockDao {
 		 * The students code to fetch data from the database will be written here
 		 * Return stock matching symbol
 		 */
-        return getDummyStock();
+    	System.out.println("Start getStockBySymbol Function");
+        final String DB_URL = "jdbc:mysql://localhost:3306/CSE305";
+        final String USER = "root";
+        final String PASS = "2002318";
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement stmt = conn.createStatement();
+            System.out.println("successfully connect to database");
+            
+            String query = "select * from Stock where StockSymbol = " + '\'' + stockSymbol + '\'';
+            
+            System.out.println(query);
+            ResultSet result=stmt.executeQuery(query);
+            while (result.next()) {
+            	Stock stock = new Stock();
+                stock.setName(result.getString("StockName"));
+                stock.setSymbol(result.getString("StockSymbol"));
+                stock.setPrice(result.getDouble("SharePrice"));
+                stock.setNumShares(result.getInt("NumberofShares"));
+                stock.setType(result.getString("StockType"));
+                return stock;
+            }
+
+
+         } catch (Exception e) {
+            e.printStackTrace();
+         }
+
+        return null;
     }
 
     public String setStockPrice(String stockSymbol, double stockPrice) {
@@ -75,7 +169,30 @@ public class StockDao {
          * Perform price update of the stock symbol
          */
 
-        return "success";
+    	System.out.println("Start setStockPrice Function");
+		final String DB_URL = "jdbc:mysql://localhost:3306/CSE305";
+		final String USER = "root";
+		final String PASS = "2002318";
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+	        Statement stmt = conn.createStatement();
+	        System.out.println("successfully connect to database");
+	        
+	        String content = "SharePrice = " + '\'' + stockPrice + '\'';
+	        
+	        String query = "update Stock set " + content + " where StockSymbol = " + '\'' + stockSymbol + '\'';
+	        System.out.println(query);
+	        int result = stmt.executeUpdate(query);
+	        return "success";
+	        
+	        
+	        
+	         
+	      } catch (Exception e) {
+	         e.printStackTrace();
+	      }
+		 return "failure";
     }
 	
 	public List<Stock> getOverallBestsellers() {
@@ -85,7 +202,39 @@ public class StockDao {
 		 * Get list of bestseller stocks
 		 */
 
-		return getDummyStocks();
+		System.out.println("Start getOverallBestsellers Function");
+        final String DB_URL = "jdbc:mysql://localhost:3306/CSE305";
+        final String USER = "root";
+        final String PASS = "2002318";
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement stmt = conn.createStatement();
+            System.out.println("successfully connect to database");
+            
+            String query = "select * from Stock S,Orders O, Customer C\n" + 
+            		"where O.Cus_Acc_Num = C.AccountNumber and C.Rating > 0.75 and S.StockSymbol=O.StockSymbol;";
+            
+            System.out.println(query);
+            ResultSet result=stmt.executeQuery(query);
+            List<Stock> stocks = new ArrayList<Stock>();
+            while (result.next()) {
+            	Stock stock = new Stock();
+                stock.setName(result.getString("StockName"));
+                stock.setSymbol(result.getString("StockSymbol"));
+                stock.setPrice(result.getDouble("SharePrice"));
+                stock.setNumShares(result.getInt("NumberofShares"));
+                stock.setType(result.getString("StockType"));
+                stocks.add(stock);
+            }
+            return stocks;
+
+
+         } catch (Exception e) {
+            e.printStackTrace();
+         }
+
+        return null;
 
 	}
 
@@ -126,36 +275,8 @@ public class StockDao {
 		 * The students code to fetch data from the database will be written here
 		 * Return stock suggestions for given "customerId"
 		 */
-    	List<Stock> res=new ArrayList<Stock>();
-        System.out.println("Start getStockSuggestions Function");
-		final String DB_URL = "jdbc:mysql://localhost:3306/CSE305";
-		final String USER = "root";
-		final String PASS = "2002318";
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-	        Statement stmt = conn.createStatement();
-	        System.out.println("successfully connect to database");
-	        String query="select * from Stock S, Orders O where O.Cus_Acc_Num="+customerID+" and O.StockSymbol=S.StockSymbol";
-;		    System.out.println(query);
-	        ResultSet result=stmt.executeQuery(query);
-			while (result.next()) {
-				Stock stock = new Stock();
-		        stock.setName(result.getString("StockName"));
-		        stock.setSymbol(result.getString("StockSymbol"));
-		        stock.setPrice(result.getInt("SharePrice"));
-		        stock.setNumShares(result.getInt("NumberofShares"));
-		        stock.setType(result.getString("StockType"));
-		        res.add(stock);
-				
-			}
-			return res;
-			
-	         
-	      } catch (Exception e) {
-	         e.printStackTrace();
-	      }
-		return null;
+
+        return getDummyStocks();
 
     }
 

@@ -25,6 +25,7 @@
                 </c:forEach>
             </select>
         </div>
+       
         <div id='orderNumShares-group' class="form-group">
             <label for="orderNumShares">Number of Shares</label>
             <input type="number" class="form-control" id="orderNumShares" name="orderNumShares" required>

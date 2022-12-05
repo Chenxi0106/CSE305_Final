@@ -231,7 +231,8 @@ try {
 	Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
        Statement stmt = conn.createStatement();
        System.out.println("successfully connect to database");
-       String query="select * from Employee where SSN=" + employeeID;
+       String query="select * from Employee where SSN=" + '\''+employeeID+'\'';
+       System.out.println(query);
        ResultSet result = stmt.executeQuery(query);
        while(result.next()) {
         Location location = new Location();
@@ -264,13 +265,54 @@ return null;
 }
 
 public Employee getHighestRevenueEmployee() {
+    System.out.println("Start getHighestRevenueEmployee Function");
+    final String DB_URL = "jdbc:mysql://localhost:3306/CSE305";
+    final String USER = "root";
+    final String PASS = "2002318";
+    try {
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        Statement stmt = conn.createStatement();
+        System.out.println("successfully connect to database");
 
-/*
-* The students code to fetch employee data who generated the highest revenue will be written here
-* The record is required to be encapsulated as a "Employee" class object
-*/
+        String query = "SELECT * \r\n"
+         + "FROM Employee\r\n"
+         + "WHERE SSN = ( \r\n"
+         + "    SELECT Employee_ID\r\n"
+         + "              FROM Orders\r\n"
+         + "              GROUP BY Employee_ID\r\n"
+         + "              ORDER BY sum(Transaction_Fee) desc\r\n"
+         + "              LIMIT 1\r\n"
+         + ")";
+        System.out.println(query);
 
-return getDummyEmployee();
+        ResultSet result = stmt.executeQuery(query);
+        while(result.next()){
+           Location location = new Location();
+           location.setZipCode(result.getInt("ZipCode"));
+           location.setCity(result.getString("City"));
+           location.setState(result.getString("State"));
+           Employee employee = new Employee();
+           employee.setLocation(location);
+           employee.setEmail(result.getString("Email"));
+           employee.setEmployeeID(result.getString("SSN"));
+           employee.setAddress(result.getString("Address"));
+           employee.setLastName(result.getString("LastName"));
+           employee.setFirstName(result.getString("FirstName"));
+           employee.setPassword(result.getString("PassWord"));
+           employee.setEmployeeType(result.getString("EmployeeType"));
+           employee.setTelephone(result.getString("Telephone"));
+           employee.setStartDate(result.getString("StartDate"));
+           employee.setHourlyRate(result.getFloat("HourlyRate"));
+           return employee;
+       }
+
+
+         } catch (Exception e) {
+            e.printStackTrace();
+         }
+
+    return null;
 }
 
 public String getEmployeeID(String username) {
@@ -287,19 +329,19 @@ final String PASS = "2002318";
 try {
 	Class.forName("com.mysql.jdbc.Driver");
 	Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-       Statement stmt = conn.createStatement();
-       System.out.println("successfully connect to database");
-       
-       String query = "select * from Employee where Email=" + username;
-   System.out.println(query);
-ResultSet result = stmt.executeQuery(query);
-       return result.getString("SSN");
+	Statement stmt = conn.createStatement();
+	System.out.println("successfully connect to database");
 
+	String query = "select * from Employee where Email=" + '\'' + username + '\'';
+	System.out.println(query);
+	ResultSet result = stmt.executeQuery(query);
+	while(result.next()) {
+		return result.getString("SSN");
+	}
 
-       
-     } catch (Exception e) {
-        e.printStackTrace();
-     }
+} catch (Exception e) {
+	e.printStackTrace();
+}
 return null;
 }
 

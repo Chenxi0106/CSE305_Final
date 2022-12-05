@@ -101,18 +101,62 @@ public class CustomerDao {
 	      }
 		return null;
 	}
-
-
+	
 	public Customer getHighestRevenueCustomer() {
-		/*
-		 * This method fetches the customer who generated the highest total revenue and returns it
-		 * The students code to fetch data from the database will be written here
-		 * The customer record is required to be encapsulated as a "Customer" class object
-		 */
-		System.out.println("Start to getHighestRevenueCustomer function ");
-		return getDummyCustomer();
-	}
 
+        System.out.println("Start getHighestRevenueCustomer Function");
+        final String DB_URL = "jdbc:mysql://localhost:3306/CSE305";
+        final String USER = "root";
+        final String PASS = "2002318";
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement stmt = conn.createStatement();
+            System.out.println("successfully connect to database");
+            String query = "SELECT *\r\n" + 
+                    "FROM Customer\r\n" + 
+                    "WHERE AccountNumber = (\r\n" + 
+                    "    SELECT Cus_Acc_Num\r\n" + 
+                    "    FROM Orders\r\n" + 
+                    "    GROUP BY Cus_Acc_Num\r\n" + 
+                    "    ORDER BY sum(Transaction_Fee) desc\r\n" + 
+                    "    LIMIT 1\r\n" + 
+                    ")";
+            System.out.println(query);
+            ResultSet result = stmt.executeQuery(query);
+            while(result.next()){
+                Location location = new Location();
+                location.setZipCode(result.getInt("ZipCode"));
+                location.setCity(result.getString("City"));
+                location.setState(result.getString("State"));
+                Customer customer = new Customer();
+                customer.setId(result.getString("AccountNumber"));
+                customer.setAddress(result.getString("Address"));
+                customer.setLastName(result.getString("LastName"));
+                customer.setFirstName(result.getString("FirstName"));
+                customer.setEmail(result.getString("Email"));
+                customer.setPassword(result.getString("PassWord"));
+                customer.setLocation(location);
+                customer.setTelephone(result.getString("Telephone"));
+                customer.setCreditCard(result.getString("CreditCardNumber"));
+                customer.setRating(result.getInt("Rating"));
+                return customer;
+           }
+
+
+             } catch (Exception e) {
+                e.printStackTrace();
+             }
+
+        return null;
+    }
+	
+	
+	
+	
+	
+	
+	
 	public Customer getCustomer(String customerID) {
 
 		/*
@@ -213,7 +257,7 @@ public class CustomerDao {
 			Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 	        Statement stmt = conn.createStatement();
 	        System.out.println("successfully connect to database");
-	        String query="select AccountNumber from Customer where Email="+email;
+	        String query="select AccountNumber from Customer where Email="+'\''+email+'\'';
 	        ResultSet result=stmt.executeQuery(query);
 	        while(result.next()) {
 	        	return result.getString("AccountNumber");
